@@ -8,6 +8,10 @@ var PORT = 3000
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.get("/assets/styles.css", function(req, res) {
+    res.sendFile(path.join(__dirname, "assets/css/styles.css"))
+})
+
 app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname, "index.html"))
 })
@@ -23,10 +27,21 @@ app.get("/api/notes", function(req, res) {
         }
         else {
             res.json(data)
-            console.log("potato")
             console.log(data)
         }
     })
+})
+
+// FIX!!!
+app.post("/api/notes", function(req, res){
+
+    console.log("fetching notes")
+})
+
+// FIX!!!
+app.delete("/api/notes/:id", function(req, res){
+
+    console.log("deleting note")
 })
 
 app.listen(PORT, function(){
