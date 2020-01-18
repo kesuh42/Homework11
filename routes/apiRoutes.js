@@ -7,7 +7,7 @@ module.exports = function(app) {
                 console.log(err)
             }
             else {
-                res.json(data)
+                res.json(JSON.parse(data))
             }
         })
     })
@@ -19,6 +19,7 @@ module.exports = function(app) {
             var json = JSON.parse(data)
             req.body.id = json.length + 1
             json.push(req.body)
+            res.send("hello")
         
             fs.writeFile("db/db.json", JSON.stringify(json), function(err){
                 if (err) throw err;
@@ -29,18 +30,25 @@ module.exports = function(app) {
 
     // FIX!!!
     app.delete("/api/notes/:id", function(req, res){
-        var id = req.params.id
+        var id = parseInt(req.params.id)
         fs.readFile('db/db.json', "utf8", function (err, data) {
             if (err) throw err;
-            var json = JSON.parse(data)
+            var notesArray = JSON.parse(data)
 
-            //NEED TO WRITE FOR LOOP
+            var note = notesArray.find(function(note){
+                return note.id === id
+            })
+
+            var index = notesArray.indexOf(note)
+            notesArray.splice(index, 1)
+            console.log(notesArray)
         
-            fs.writeFile("db/db.json", JSON.stringify(json), function(err){
+            fs.writeFile("db/db.json", JSON.stringify(notesArray), function(err){
                 if (err) throw err;
                 console.log(`Deleting note`)
             })
         })
+        res.send("hello")
     })
   };
   
